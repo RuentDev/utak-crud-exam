@@ -39,7 +39,7 @@ const sidebarOptions = [
     label: "Orders",
     isActive: false,
     options: [],
-    link: "/",
+    link: "/orders",
     icon: FaCartShopping
   },
   {
@@ -47,7 +47,7 @@ const sidebarOptions = [
     label: "Sales",
     isActive: false,
     options: [],
-    link: "/",
+    link: "/sales",
     icon: FaDollarSign
   },
   {
@@ -55,7 +55,7 @@ const sidebarOptions = [
     label: "Discounts",
     isActive: false,
     options: [],
-    link: "/",
+    link: "/discounts",
     icon: FaCommentDollar
   },
 ]
@@ -71,6 +71,7 @@ const Sidebar:React.FC<SidebarProps> = ({}) => {
     menuCopy.forEach(menu => {
       if(menu.id === id){
         menu.isActive = !menu.isActive
+        // router.push(menu.link)
       }
     })
 

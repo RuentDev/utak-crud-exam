@@ -1,13 +1,12 @@
-import { Container } from "@chakra-ui/react";
-import { redirect } from "next/navigation";
+import { Center, Container } from "@chakra-ui/react";
 
 export default function Home() {
 
-  redirect("/products")
-
   return (
     <Container maxW ="100%" h="100%" padding={0} margin={0} >
-      HOME
+      <Center width="100%">
+        DISCOUNTS
+      </Center>
    </Container>
   );
 }
