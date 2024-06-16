@@ -1,13 +1,27 @@
+import Components from '@/components'
 import { Container } from "@chakra-ui/react";
-import { redirect } from "next/navigation";
+import { getProducts, deleteProduct, updateProduct } from "./actions";
+import React from "react";
 
-export default function Home() {
-
-  redirect("/products")
+export default async function Home() {
+ 
+  // JUST WANT YOU TO KNOW PROPS DRILLING IS NOT RECOMMENDABLE
+  const products = await getProducts()
 
   return (
-    <Container maxW ="100%" h="100%" padding={0} margin={0} >
-      HOME
+    <Container 
+      maxW="100%"
+      height="100%"
+      border={0}
+      padding={0}
+    >
+
+    {/* TABLE */}
+    <Components.ProductTable 
+      data={products} 
+      deleteAction={deleteProduct}
+      updateAction={updateProduct}
+    />
    </Container>
-  );
+  )
 }
