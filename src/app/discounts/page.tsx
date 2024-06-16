@@ -1,6 +1,6 @@
 import { Center, Container } from "@chakra-ui/react";
 
-export default function Home() {
+export default function Discounts() {
 
   return (
     <Container maxW ="100%" h="100%" padding={0} margin={0} >
