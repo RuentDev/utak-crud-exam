@@ -11,9 +11,9 @@ const getProducts = async () => {
     // const orderedQuery = query(collectionRef, orderBy("createdAt", "desc"));
     // const productCollectionSnapshot = await getDocs(orderedQuery);
   
-    const productCollectionSnapshot = await getDocs(collectionRef)
+    const querySnapShot = await getDocs(collectionRef)
 
-    const productsList = productCollectionSnapshot.docs.map(doc => ({
+    const productsList = querySnapShot.docs.map(doc => ({
       ...doc.data(), id: doc.id
     }))
 
@@ -43,6 +43,7 @@ const addProduct = async (formData: FormData) => {
     price: price,
     cost: cost,
     quantity: quantity,
+    createdAt: new Date()
   })
 
   
@@ -96,7 +97,8 @@ const updateProduct = async (productId: string, formData: any) => {
       option,
       price,
       cost,
-      quantity
+      quantity,
+      updatedAt: new Date()
     });
   } catch (error) {
     console.log(error)

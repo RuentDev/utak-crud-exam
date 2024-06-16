@@ -71,7 +71,6 @@ const Sidebar:React.FC<SidebarProps> = ({}) => {
     menuCopy.forEach(menu => {
       if(menu.id === id){
         menu.isActive = !menu.isActive
-        // router.push(menu.link)
       }
     })
 
@@ -87,7 +86,7 @@ const Sidebar:React.FC<SidebarProps> = ({}) => {
   }
 
   return (
-    <Container width={300} padding={0}>
+    <Container width={300} padding={0} borderTop={0} borderLeft={0} borderBottom={0}>
       <Container
         width="100%"
         height={70}

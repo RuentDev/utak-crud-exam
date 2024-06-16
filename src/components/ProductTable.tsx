@@ -8,7 +8,7 @@ import React, { ChangeEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from '@chakra-ui/react'
 import { searchProduct } from "@/app/actions";
-import { collection, onSnapshot } from "firebase/firestore";
+import { collection, getDocs, onSnapshot, orderBy, query } from "firebase/firestore";
 import { db } from "@/firebase";
 
 
@@ -261,20 +261,27 @@ const ProductTable:React.FC<ProductTableProps> = ({data, updateAction, deleteAct
   }
 
   useEffect(() => {
-    const todoRef = collection(db, 'products');
-    const unsubscribe = onSnapshot(todoRef, (snapshot) => {
+    const collectionRef = collection(db, 'products');
+
+    async function createQuery(){
+      const orderedQuery = query(collectionRef, orderBy("createdAt", "desc"));
+      return await getDocs(orderedQuery);
+    }
+
+    const unsubscribe = onSnapshot(collectionRef, (snapshot) => {
       if(!snapshot.empty) {
-          let todos: any[] = [];
-          snapshot.forEach((doc) => {
-              todos.push({...doc.data(), id: doc.id});
-          })
-          setTableData([...todos]);
-          return;
+        let products: any[] = [];
+        snapshot.forEach((doc) => {
+          products.push({...doc.data(), id: doc.id});
+          products.sort((a: any, b: any) => a.createdAt - b.createdAt)
+        })
+        setTableData([...products]);
+        return;
       }
       setTableData([]);
-  });
+    });
 
-return () => unsubscribe();
+    return () => unsubscribe();
   }, [])
 
   return (
