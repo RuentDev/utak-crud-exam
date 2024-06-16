@@ -4,10 +4,12 @@ import { FaPen, FaTrash, FaSave } from "react-icons/fa";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { MdAddShoppingCart } from "react-icons/md";
 import { IoIosCloseCircle } from "react-icons/io";
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from '@chakra-ui/react'
 import { searchProduct } from "@/app/actions";
+import { collection, onSnapshot } from "firebase/firestore";
+import { db } from "@/firebase";
 
 
 interface TableRowProps {
@@ -25,7 +27,6 @@ interface ProductTableProps {
 
 
 const TableRow: React.FC<TableRowProps> = ({ product, deleteAction, updateAction }) => {
-  const toast = useToast()
   const [isEditing, setIsEditing] = React.useState(false)
 
   const [formState, setFormState] = React.useState({
@@ -52,7 +53,7 @@ const TableRow: React.FC<TableRowProps> = ({ product, deleteAction, updateAction
   const handleUpdateAction = (updateAction: any) => {
     updateAction(product.id, formState)
     setIsEditing(!isEditing)
-  }
+  } 
 
 
   return (
@@ -218,7 +219,7 @@ const TableRow: React.FC<TableRowProps> = ({ product, deleteAction, updateAction
 const ProductTable:React.FC<ProductTableProps> = ({data, updateAction, deleteAction}) => {
   const router = useRouter()
   const toast = useToast()
-  const [tableData, setTableData] = React.useState(data)
+  const [tableData, setTableData] = React.useState<any[]>([])
   const handleTableRowClick = () => {}
 
   const handleDeleteAction = (product: any) => {
@@ -258,6 +259,23 @@ const ProductTable:React.FC<ProductTableProps> = ({data, updateAction, deleteAct
     const products = await searchProduct(value)
     setTableData(products)
   }
+
+  useEffect(() => {
+    const todoRef = collection(db, 'products');
+    const unsubscribe = onSnapshot(todoRef, (snapshot) => {
+      if(!snapshot.empty) {
+          let todos: any[] = [];
+          snapshot.forEach((doc) => {
+              todos.push({...doc.data(), id: doc.id});
+          })
+          setTableData([...todos]);
+          return;
+      }
+      setTableData([]);
+  });
+
+return () => unsubscribe();
+  }, [])
 
   return (
     <Container overflow="hidden" border={0}>
